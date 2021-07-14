@@ -24,6 +24,19 @@ function ProfileSidebar(propriedades) {
   )
 }
 
+function ProfileRelationsBox(propriedades) {
+  return (
+    <ProfileRelationsBoxWrapper>
+      <h2 className="smallTitle">
+        {propriedades.title} ({propriedades.items.length})
+      </h2>
+      <ul>
+        { }
+      </ul>
+    </ProfileRelationsBoxWrapper>
+  )
+}
+
 export default function Home() {
   React.useState(['Alurakut']);
   const usuarioAleatorio = 'zezinnnnn';
@@ -32,11 +45,7 @@ export default function Home() {
     title: 'Eu odeio acordar cedo',
     image: 'https://alurakut.vercel.app/capa-comunidade-01.jpg'
   }]);
-  // const comunidades = comunidades[0];
-  // const alteradorDeComunidades/setComunidades = comunidades[1];
 
-  //console.log('Nosso teste',);
-  // const comunidades = ['Alurakut'];
   const pessoasFavoritas = [
     'juunegreiros',
     'omariosouto',
@@ -45,6 +54,21 @@ export default function Home() {
     'marcobrunodev',
     'Hebert324'
   ]
+
+  const [seguidores, setSeguidores] = React.useState([]);
+
+  React.useEffect(function () {
+    fetch('https://api.github.com/users/peas/followers')
+      .then(function (respostaDoServidor) {
+        return respostaDoServidor.json();
+      })
+      .then(function (respostaCompleta) {
+        setSeguidores(respostaCompleta);
+      })
+  }, [])
+
+
+  console.log('seguidores antes do return ', seguidores)
 
   return (
     <>
@@ -107,6 +131,9 @@ export default function Home() {
         </div>
 
         <div className="profileRelationsArea" style={{ gridArea: 'profileRelationsArea' }}>
+
+          <ProfileRelationsBox title="Seguidores" items={seguidores} />
+
           <ProfileRelationsBoxWrapper>
             <h2 className="smallTitle">
               Comunidades ({comunidades.length})
