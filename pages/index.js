@@ -40,11 +40,7 @@ function ProfileRelationsBox(propriedades) {
 export default function Home() {
   React.useState(['Alurakut']);
   const usuarioAleatorio = 'zezinnnnn';
-  const [comunidades, setComunidades] = React.useState([{
-    id: '12802378123789378912789789123896123',
-    title: 'Eu odeio acordar cedo',
-    image: 'https://alurakut.vercel.app/capa-comunidade-01.jpg'
-  }]);
+  const [comunidades, setComunidades] = React.useState([]);
 
   const pessoasFavoritas = [
     'juunegreiros',
@@ -64,6 +60,32 @@ export default function Home() {
       })
       .then(function (respostaCompleta) {
         setSeguidores(respostaCompleta);
+      })
+
+    fetch('https://graphql.datocms.com/', {
+      method: 'POST',
+      headers: {
+        'Authorization': '4f91160c386770eca3cea3f8401710',
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      body: JSON.stringify({
+        "query":
+          `query {
+            allCommunities {
+              id
+              title
+              imageUrl
+              creatorSlug
+            }
+          }`
+      })
+    })
+      .then((response) => response.json())
+      .then((respostaCompleta) => {
+        const comunidadesDato = respostaCompleta.data.allCommunities;
+        console.log(comunidadesDato)
+        setComunidades(comunidadesDato)
       })
   }, [])
 
@@ -143,8 +165,8 @@ export default function Home() {
               {comunidades.map((itemAtual) => {
                 return (
                   <li key={itemAtual.id}>
-                    <a href={`/users/${itemAtual.title}`} key={itemAtual.title}>
-                      <img src={itemAtual.image} />
+                    <a href={`https://br.pinterest.com/pin/576249714826165476/`}>
+                      <img src={itemAtual.imageUrl} />
                       <span>{itemAtual.title}</span>
                     </a>
                   </li>
