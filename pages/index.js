@@ -5,6 +5,7 @@ import MainGrid from '../src/components/MainGrid'
 import Box from '../src/components/Box'
 import { AlurakutMenu, AlurakutProfileSidebarMenuDefault, OrkutNostalgicIconSet } from '../src/lib/AlurakutCommons';
 import { ProfileRelationsBoxWrapper } from '../src/components/ProfileRelations';
+import { useState, useEffect } from 'react'
 
 function ProfileSidebar(propriedades) {
   return (
@@ -25,16 +26,29 @@ function ProfileSidebar(propriedades) {
   )
 }
 
-function ProfileRelationsBox(propriedades) {
+function ProfileRelationsBox(props) {
   return (
-    <ProfileRelationsBoxWrapper>
-      <h2 className="smallTitle">
-        {propriedades.title} ({propriedades.items.length})
-      </h2>
-      <ul>
-        { }
-      </ul>
-    </ProfileRelationsBoxWrapper>
+    <>
+      <ProfileRelationsBoxWrapper>
+
+        <h2 className="smallTitle">{props.title} <span style={{ color: '#2E7BB4' }}>({props.items.length})</span></h2>
+
+        <ul>
+          {props.items.map((profile) => {
+            return (
+              <li key={profile.id}>
+                <a href={`https://github.com/${profile.login}`} target="_blank">
+                  <img src={`https://github.com/${profile.login}.png`} />
+                  <span>{profile.login}</span>
+                </a>
+              </li>
+            )
+          })}
+        </ul>
+
+
+      </ProfileRelationsBoxWrapper>
+    </>
   )
 }
 
@@ -42,6 +56,24 @@ export default function Home(props) {
   React.useState(['Alurakut']);
   const usuarioAleatorio = props.githubUser;
   const [comunidades, setComunidades] = React.useState([]);
+
+  const [followers, setFollowers] = useState([])
+
+  useEffect(() => {
+    fetch(`https://api.github.com/users/${usuarioAleatorio}/followers`)
+      .then((response) => {
+        if (response.ok) {
+          return response.json()
+        }
+        throw new Error("Erro da API do github: " + response.status)
+      })
+      .then((data) => {
+        return setFollowers(data)
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+  })
 
   const pessoasFavoritas = [
     'juunegreiros',
@@ -169,7 +201,8 @@ export default function Home(props) {
 
         <div className="profileRelationsArea" style={{ gridArea: 'profileRelationsArea' }}>
 
-          <ProfileRelationsBox title="Seguidores" items={seguidores} />
+          <ProfileRelationsBox title='Seguidores' items={followers} />
+
 
           <ProfileRelationsBoxWrapper>
             <h2 className="smallTitle">
@@ -180,7 +213,7 @@ export default function Home(props) {
               {comunidades.map((itemAtual) => {
                 return (
                   <li key={itemAtual.id}>
-                    <a href={`https://br.pinterest.com/pin/576249714826165476/`}>
+                    <a href={`/comunidade`}>
                       <img src={itemAtual.imageUrl} />
                       <span>{itemAtual.title}</span>
                     </a>

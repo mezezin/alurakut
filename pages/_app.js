@@ -9,7 +9,7 @@ const GlobalStyle = createGlobalStyle`
   }
 
   body {
-    background-color: #D9E6F6;
+    background-image: url('https://dentrodachamine.com/wp-content/uploads/2018/12/WholeCrew-1920x1080.jpg');
     font-family: sans-serif;
   }
 

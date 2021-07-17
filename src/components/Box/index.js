@@ -4,6 +4,19 @@ const Box = styled.div`
   background: #FFFFFF;
   border-radius: 8px;
   padding: 16px;
+  overflow-y: auto;
+  ::-webkit-scrollbar-track {
+    border-radius: 10px;
+  }
+  
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #4A4A4A; 
+    border-radius: 10px;
+  }
+  ::-webkit-scrollbar-track {
+      background: #00000000;
+  }
   /* CSS Pré-Pronto */
   margin-bottom: 10px;
   .boxLink {
